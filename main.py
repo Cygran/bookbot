@@ -1,9 +1,17 @@
+book = "books/frankenstein.txt"
+
 def main():
-    with open("books/frankenstein.txt") as f:
+    with open(book) as f:
         file_contents = f.read()
-        word_count = count_words(file_contents)
-        char_set = count_chars(file_contents)
-        print(char_set)
+        count = count_words(file_contents)
+        d = count_chars(file_contents)
+        sorted_list = list_of_d(d)
+        #Print Final Report
+        print(f"--- Begin report of {book} ---")
+        print(f"{count} words found in the document\n")
+        for item in sorted_list:
+            print(f"The '{item['char']}' character was found {item['num']} times")
+        print(f"--- End report ---")        
 
 def count_words(file_contents):
     count = 0
@@ -14,12 +22,23 @@ def count_words(file_contents):
 
 def count_chars(file_contents):
     lowered_file_contents = file_contents.lower()
-    dict = {}
+    d = {}
     for char in lowered_file_contents:
-        if char in dict:
-            dict[char] += 1
+        if char in d:
+            d[char] += 1
         else:
-            dict[char] = 1
-    return dict
+            if char.isalpha():
+                d[char] =1
+    return d
     
+def list_of_d(d):
+        char = d.keys()
+        num = d.values()
+        list = [{"char": char, "num": num} for char, num in d.items()]
+        list.sort(reverse=True, key=sort_on)
+        return list
+
+def sort_on(d):
+    return d["num"]
+
 main()
